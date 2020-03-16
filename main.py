@@ -210,11 +210,13 @@ def delay(browser, page, is_last) :
             soup = BeautifulSoup(html, "html.parser")
             help_contents = soup.find_all('div', class_="page-img-box")
             text1 = help_contents[page].find('img')['src']
-            img_byte1 = get_img_from_url(text1)
+            index1 = text1.find(",")
+            img_byte1 = base64.b64decode(text1[index1 + 1:].encode("utf-8"))
             num1, tmp = get_image_size(img_byte1)
             if not is_last :  # 如果不是最后一个
                 text2 = help_contents[page + 1].find('img')['src']
-                img_byte2 = get_img_from_url(text2)
+                index2 = text2.find(",")
+                img_byte2 = base64.b64decode(text2[index2 + 1:].encode("utf-8"))
                 num2, tmp = get_image_size(img_byte2)
                 if num1 > 500 and num2 > 500 :
                     return [img_byte1, img_byte2]
