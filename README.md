@@ -14,6 +14,10 @@
 
 ### 依赖的库及说明
 
+可以直接执行
+`pip install -r requirements.txt`
+安装本项目所依赖的模块
+
 ```python
 from PIL import Image
 from reportlab.lib.pagesizes import A4, portrait, landscape, mm
@@ -25,6 +29,7 @@ from bs4 import BeautifulSoup
 from selenium.webdriver.common.keys import Keys
 import time
 import datetime
+import base64
 import queue
 from Crypto.Util.number import *
 from PyPDF2 import PdfFileReader, PdfFileWriter
@@ -32,7 +37,8 @@ import requests
 ```
 * 安装模块可以加载国内镜像（这样速度会很快），具体Google
 * Crypto模块的安装可能会出错，具体Google，可以参考 [这里](https://www.jb51.net/article/131185.htm)
-* Crypto.Util可能会报错，其实是安装`pycrypto`，也就是`pip install pycrypto`
+* Crypto.Util可能会报错，~~其实是安装`pycrypto`，也就是`pip install pycrypto`，这里发现这个模块安装过程中需要依赖VS2008环境。还是不完美~~
+    * 所以可以使用`pip install pycryptodome`进行替换。想请看[这里](https://stackoverrun.com/cn/q/12091094)
 
 ### 程序使用说明
 
@@ -53,7 +59,12 @@ _pdf_path = "F:\\test\\temp\\pdf"
 1. 将url末尾的书籍ID进行替换
 2. 输入学号，即 `stu_number`
 3. 输入密码，即 `password`
-4. 存储图片的路径、PDF的路径 **注意这里是已经存在的路径，也就是需要手动建文件夹**
+4. 存储图片的路径、PDF的路径
 
 ### 最后
 合理使用，使用愉快。
+
+
+### Tips:
+
+下载后可以使用ABBYY对PDF文档进行OCR识别，这样便解决了文档复制问题。

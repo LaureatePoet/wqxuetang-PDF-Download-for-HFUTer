@@ -8,6 +8,7 @@
 
 # modified: Poet
 # time: 2020/02/23 19:00
+# modified: 2020/04/21 12:00
 # description: Adapted to WebVPN-HFUT.
 
 from PIL import Image
@@ -20,12 +21,16 @@ from bs4 import BeautifulSoup
 from selenium.webdriver.common.keys import Keys
 import time
 import datetime
+import base64
 import queue
 from Crypto.Util.number import *
 from PyPDF2 import PdfFileReader, PdfFileWriter
 import requests
  
 BEGIN_PAGE = 1
+
+# 先访问一次文泉官网，以解决不能访问资源的问题
+url0 = "https://www.wqxuetang.com/#/"
 
 # 请替换url末尾的数字，例如这里的3184535，替换为目标书籍的ID
 url = "https://lib--hfut-wqxuetang-com-443.webvpn.hfut.edu.cn/read/pdf/3184535"
@@ -38,7 +43,15 @@ _image_path = "F:\\test\\temp\\img"
 # PDF路径(不要与图片路径相同)
 _pdf_path = "F:\\test\\temp\\pdf"
  
+
+
+def mkdir(path):
  
+	folder = os.path.exists(path)
+ 
+	if not folder:                   #判断是否存在文件夹如果不存在则创建为文件夹
+		os.makedirs(path)            #makedirs 创建文件时如果路径不存在会创建这个路径
+
 def get_cookie_dict(cookie_para) :
     """
     :param cookie_para: 传入的cookie字符串
@@ -389,15 +402,19 @@ def add_shu_q(shu_q, pdf_path) :
  
  
 if __name__ == "__main__" :
+    mkdir(_image_path)
+    mkdir(_pdf_path)
     start = time.time()  # 开始时间
     browser = webdriver.Chrome()
-    browser.get(url=url)  # 先访问一次
+    browser.get(url=url0)  # 先访问文泉官网
+    time.sleep(4)
+    browser.get(url=url)  # 登陆web-vpn
     browser.find_element_by_id("user_login").send_keys(stu_number)
     browser.find_element_by_id("user_password").send_keys(password)
     browser.find_element_by_xpath("//*[@id=\"login-form\"]/div[3]/input").click()
-    time.sleep(3)
+    time.sleep(1)
     browser.get(url=url)
-    time.sleep(20)
+    time.sleep(4)
     dict_cookies=browser.get_cookies()
     str_cookie=get_cookies_str(dict_cookies)
     cookie_dict = get_cookie_dict(str_cookie)
